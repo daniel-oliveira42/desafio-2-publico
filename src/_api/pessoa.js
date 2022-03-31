@@ -14,18 +14,26 @@ export default {
   Post: function (data) {
     return new Promise((resolve, reject) => {
       var pessoas = getListaPessoas()
-      // Insira aqui o seu código: adicionar item na lista
+
+      data.id = Math.max.apply(Math, pessoas.map(function (o) { return o.id; })) + 1 // Atribui o maior id + 1 ao objeto Pessoa passado
+
+      pessoas.push(data); // Adiciona o objeto de Pessoa passado como parâmetro
 
       setListaPessoas(pessoas)
-      resolve(data)
+      resolve(pessoas)
     })
   },
   Put: function (id, data) {
     return new Promise((resolve, reject) => {
       var pessoas = getListaPessoas()
+
       // Insira aqui o seu código: encontre o item na lista e o altere
+      const index = pessoas.findIndex(obj => obj.id === id)
+
+      pessoas[index] = data;
+
       setListaPessoas(pessoas)
-      resolve(data)
+      resolve(pessoas)
     })
   },
   Delete: function (id) {
@@ -33,8 +41,12 @@ export default {
       var pessoas = getListaPessoas()
       // Insira aqui o seu código: exclua o item da lista
 
+      pessoas = pessoas.filter(function (objeto) {
+        return objeto.id !== id
+      })
+
       setListaPessoas(pessoas)
-      resolve(id)
+      resolve(pessoas)
     })
   },
   ReiniciarLista: function () {
